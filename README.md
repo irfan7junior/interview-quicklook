@@ -202,7 +202,7 @@ def sol_anagram(string1: str, string2: str) -> bool:
 
 ![](mdImages/2021-02-18-15-57-21.png)
 
-## </details>
+</details>
 
 <details>
 
@@ -506,5 +506,361 @@ def sol_uni_char_look(string: str) -> bool:
 **Output**
 
 ![](mdImages/2021-02-18-16-17-15.png)
+
+</details>
+
+## Stack, Queue, Deque
+
+### What is a Stack
+
+![](mdImages/2021-02-18-17-21-40.png)
+
+> LIFO Principle
+
+<details>
+
+  <summary>Overview</summary>
+
+A stack is an ordered collection of items where the addition of new items and the removal of existing items always takes place at the same end. This end is commonly referred to as the “top.” The end opposite the top is known as the “base.”
+
+The base of the stack is significant since items stored in the stack that are closer to the base represent those that have been in the stack the longest. The most recently added item is the one that is in position to be removed first.
+
+This ordering principle is sometimes called LIFO, last-in first-out. It provides an ordering based on length of time in the collection. Newer items are near the top, while older items are near the base.
+
+For example, consider the figure below:
+
+![](https://upload.wikimedia.org/wikipedia/commons/b/b4/Lifo_stack.png)
+
+Note how the first items "pushed" to the stack begin at the base, and as items are "popped" out. Stacks are fundamentally important, as they can be used to reverse the order of items. The order of insertion is the reverse of the order of removal.
+
+Considering this reversal property, you can perhaps think of examples of stacks that occur as you use your computer. For example, every web browser has a Back button. As you navigate from web page to web page, those pages are placed on a stack (actually it is the URLs that are going on the stack). The current page that you are viewing is on the top and the first page you looked at is at the base. If you click on the Back button, you begin to move in reverse order through the pages.
+
+</details>
+
+<details>
+
+  <summary>Stack Implementation</summary>
+
+Before we implement our own Stack class, let's review the properties and methods of a Stack.
+
+The stack abstract data type is defined by the following structure and operations. A stack is structured, as described above, as an ordered collection of items where items are added to and removed from the end called the “top.” Stacks are ordered LIFO. The stack operations are given below.
+
+- Stack() creates a new stack that is empty. It needs no parameters and returns an empty stack.
+- push(item) adds a new item to the top of the stack. It needs the item and returns nothing.
+- pop() removes the top item from the stack. It needs no parameters and returns the item. The stack is modified.
+- peek() returns the top item from the stack but does not remove it. It needs no parameters. The stack is not modified.
+- isEmpty() tests to see whether the stack is empty. It needs no parameters and returns a boolean value.
+- size() returns the number of items on the stack. It needs no parameters and returns an integer.
+
+```py
+class Stack(object):
+  def __init__(self):
+      self.items = []
+
+  def is_empty(self):
+      return len(self) == 0
+
+  def push(self, item):
+      self.items.append(item)
+
+  def pop(self):
+      return self.items.pop()
+
+  def peek(self):
+      return self.items[-1]
+
+  def size(self):
+      return len(self.items)
+
+  def __len__(self):
+      return len(self.items)
+
+  def __iter__(self):
+      self.index = 0
+      return self
+
+  def __next__(self):
+      if self.index < 0 or self.index > len(self):
+          raise StopIteration
+      else:
+          item =  self.items[-1 * (index + 1)]
+          self.index += 1
+          return item
+
+  def __getitem__(self, index):
+      return self.items[index]
+
+  def __repr__(self):
+      return ', '.join([str(item) for item in self.items])
+```
+
+</details>
+
+### What is a Queue
+
+![](mdImages/2021-02-18-17-35-59.png)
+
+> FIFO Principle
+
+<details>
+
+  <summary>Overview</summary>
+
+A queue is an ordered collection of items where the addition of new items happens at one end, called the “rear,” and the removal of existing items occurs at the other end, commonly called the “front.” As an element enters the queue it starts at the rear and makes its way toward the front, waiting until that time when it is the next element to be removed.
+
+The most recently added item in the queue must wait at the end of the collection. The item that has been in the collection the longest is at the front. This ordering principle is sometimes called FIFO, first-in first-out. It is also known as “first-come first-served.”
+
+The simplest example of a queue is the typical line that we all participate in from time to time. We wait in a line for a movie, we wait in the check-out line at a grocery store, and we wait in the cafeteria line. The first person in that line is also the first person to get serviced/helped.
+
+Let's see a diagram which shows this and compares it to the Stack Data Structure:
+
+![](https://netmatze.files.wordpress.com/2014/08/queue.png)
+
+Note how we have two terms here, Enqueue and Dequeue. The enqueue term describes when we add a new item to the rear of the queue. The dequeue term describes removing the front item from the queue.
+
+</details>
+
+<details>
+
+  <summary>Queue Implementation</summary>
+
+Before we begin implementing our own queue, let's review the attribute and methods it will have:
+
+- Queue() creates a new queue that is empty. It needs no parameters and returns an empty queue.
+- enqueue(item) adds a new item to the rear of the queue. It needs the item and returns nothing.
+- dequeue() removes the front item from the queue. It needs no parameters and returns the item. The queue is modified.
+- isEmpty() tests to see whether the queue is empty. It needs no parameters and returns a boolean value.
+- size() returns the number of items in the queue. It needs no parameters and returns an integer.
+
+```py
+class Queue(object):
+
+    def __init__(self):
+        self.items = []
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def enqueue(self, item):
+        self.items.insert(0, item)
+
+    def dequeue(self):
+        return self.items.pop()
+
+    def size(self):
+        return len(self.items)
+
+    def __getitem__(self, index):
+        return self.items[index]
+
+    def __iter__(self):
+        self.index = 0
+        return self
+
+    def __next__(self):
+        if self.index < 0 or self.index > len(self.items) - 1:
+            raise StopIteration
+        else:
+            item = self.items[self.index]
+            self.index += 1
+            return item
+
+    def __repr__(self):
+        return 'Back => ' + ', '.join([str(item) for item in self]) + ' => Front'
+```
+
+</details>
+
+### What is a Deque
+
+![](mdImages/2021-02-18-17-58-28.png)
+
+> Insertion and Removal on either end
+
+<details>
+
+  <summary>Overview</summary>
+
+A deque, also known as a double-ended queue, is an ordered collection of items similar to the queue. It has two ends, a front and a rear, and the items remain positioned in the collection. What makes a deque different is the unrestrictive nature of adding and removing items. New items can be added at either the front or the rear. Likewise, existing items can be removed from either end. In a sense, this hybrid linear structure provides all the capabilities of stacks and queues in a single data structure.
+
+It is important to note that even though the deque can assume many of the characteristics of stacks and queues, it does not require the LIFO and FIFO orderings that are enforced by those data structures. It is up to you to make consistent use of the addition and removal operations.
+
+Let's see an Image to visualize the Deque Data Structure:
+
+![](http://www.codeproject.com/KB/recipes/669131/deque.png)
+
+Note how we can both add and remove from the front and the back of the Deque.
+
+</details>
+
+<details>
+
+  <summary>Deques Implementation</summary>
+
+```py
+class Deque(object):
+
+    def __init__(self):
+        self.items = []
+
+    def add_front(self, item):
+        self.items.append(item)
+
+    def add_rear(self, item):
+        self.items.insert(0, item)
+
+    def remove_front(self):
+        self.items.pop()
+
+    def remove_rear(self):
+        self.items.pop(0)
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def size(self):
+        return len(self.items)
+
+    def __getitem__(self, index):
+        return self.items[index]
+
+    def __iter__(self):
+        self.index = 0
+        return self
+
+    def __next__(self):
+        if self.index < 0 or self.index > len(self.items) - 1:
+            raise StopIteration
+        else:
+            item = self.items[self.index]
+            self.index += 1
+            return item
+
+    def __repr__(self):
+        return 'Back => ' + ', '.join([str(item) for item in self]) + ' => Front'
+```
+
+</details>
+
+### Problems
+
+<details>
+
+  <summary>Balanced Parentheses Check</summary>
+
+#### Problem
+
+Given a string of opening and closing parentheses, check whether it’s balanced. We have 3 types of parentheses: round brackets: (), square brackets: [], and curly brackets: {}. Assume that the string doesn’t contain any other character than these, no spaces words or numbers. As a reminder, balanced parentheses require every opening parenthesis to be closed in the reverse order opened. For example ‘([])’ is balanced but ‘([)]’ is not.
+
+You can assume the input string has no spaces.
+
+#### Solution
+
+This is a very common interview question and is one of the main ways to check your knowledge of using Stacks! We will start our solution logic as such:
+
+First we will scan the string from left to right, and every time we see an opening parenthesis we push it to a stack, because we want the last opening parenthesis to be closed first. (Remember the FILO structure of a stack!)
+
+Then, when we see a closing parenthesis we check whether the last opened one is the corresponding closing match, by popping an element from the stack. If it’s a valid match, then we proceed forward, if not return false.
+
+Or if the stack is empty we also return false, because there’s no opening parenthesis associated with this closing one. In the end, we also check whether the stack is empty. If so, we return true, otherwise return false because there were some opened parenthesis that were not closed.
+
+**Lengthy Method**
+
+```py
+from collections import deque
+
+def sol_balance_check(string: str) -> bool:
+    if len(string) % 2 != 0:
+        return False
+
+    open_parens = ['(', '{', '[']
+    close_parens = [')', '}', ']']
+    paren_stack = deque()
+
+    for char in string:
+        if char in open_parens:
+            paren_stack.append(char)
+        elif char in close_parens:
+            open_index = open_parens.index(paren_stack[-1])
+            close_index = close_parens.index(char)
+            if open_index == close_index:
+                paren_stack.pop()
+            else:
+                return False
+
+    if len(paren_stack) != 0:
+        return False
+    return True
+```
+
+**Simple Method**
+
+```py
+from collections import deque
+def sol_balance_check_easy(string: str) -> bool:
+    if len(string) % 2 != 0:
+        return False
+
+    open_parens = set(['(', '[', '{'])
+    close_parens = set([')', ']', '}'])
+    pair_parens = set([('(', ')'), ('{', '}'), ('[', ']')])
+
+    stack = deque()
+
+    for char in string:
+        if char in open_parens:
+            stack.append(char)
+        elif char in close_parens:
+            if (stack.pop(), char) not in pair_parens:
+                return False
+
+    return len(stack) == 0
+```
+
+**Output**
+
+![](mdImages/2021-02-18-20-37-19.png)
+
+</details>
+
+<details>
+
+  <summary>Implement a Queue - Using Two Stacks</summary>
+
+#### Problem
+
+Given the Stack class below, implement a Queue class using two stacks! Note, this is a "classic" interview problem. Use a Python list data structure as your Stack.
+
+#### Solution
+
+The key insight is that a stack reverses order (while a queue doesn't). A sequence of elements pushed on a stack comes back in reversed order when popped. Consequently, two stacks chained together will return elements in the same order, since reversed order reversed again is original order.
+
+We use an in-stack that we fill when an element is enqueued and the dequeue operation takes elements from an out-stack. If the out-stack is empty we pop all elements from the in-stack and push them onto the out-stack.
+
+```py
+from collections import deque
+
+class Dequeu(object):
+
+    def __init__(self):
+        self.in_stack = deque()
+        self.out_stack = deque()
+
+    def enqueue(self, item):
+        self.in_stack.append(item)
+
+    def deque(self):
+        if len(self.out_stack) == 0:
+            self.transfer()
+        return self.out_stack.pop()
+
+    def transfer(self):
+        while (self.in_stack) is not 0:
+            self.out_stack.append(self.in_stack.pop())
+```
+
+**Output**
+
+![](mdImages/2021-02-18-20-49-12.png)
 
 </details>
