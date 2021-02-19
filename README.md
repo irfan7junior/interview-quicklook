@@ -864,3 +864,542 @@ class Dequeu(object):
 ![](mdImages/2021-02-18-20-49-12.png)
 
 </details>
+
+## Linked List
+
+### What is Linked List
+
+![](mdImages/2021-02-18-20-55-23.png)
+
+<details>
+
+  <summary>Overview</summary>
+
+Remember, in a singly linked list, we have an ordered list of items as individual Nodes that have pointers to other Nodes.
+
+In a Linked List the first node is called the head and the last node is called the tail. Let's discuss the pros and cons of Linked Lists:
+
+#### Pros
+
+Linked Lists have constant-time insertions and deletions in any position, in comparison, arrays require O(n) time to do the same thing.
+
+Linked lists can continue to expand without having to specify their size ahead of time (remember our lectures on Array sizing form the Array Sequence section of the course!)
+
+#### Cons
+
+To access an element in a linked list, you need to take O(k) time to go from the head of the list to the kth element. In contrast, arrays have constant time operations to access elements in an array.
+
+</details>
+
+<details>
+
+  <summary>Implementation of a Node</summary>
+
+```py
+class Node(object):
+
+  def __init__(self, value, next = None):
+      self.value = value
+      self.next = None
+
+  def __repr__(self):
+      result = f'(Node: {self.value}) -> '
+      if self.next is None:
+          result += 'None'
+      else:
+          result += str(self.next)
+      return result
+```
+
+</details>
+
+### What is Doubly Linked List
+
+![](mdImages/2021-02-18-21-17-55.png)
+
+<details>
+
+  <summary>Implementation of Doubly Linked List</summary>
+
+```py
+ class DoublyNode(object):
+
+    def __init__(self, value, prev = None, next = None):
+        self.value = value
+        self.next = next
+        self.prev = prev
+    def __repr__(self):
+        result = f'Node: {self.value} <=> '
+        if self.next is None:
+            result += 'None'
+        else:
+            result += str(self.next)
+        return result
+```
+
+</details>
+
+### Problems
+
+<details>
+
+  <summary>Singly Linked List Cycle Check</summary>
+
+#### Problem
+
+Given a singly linked list, write a function which takes in the first node in a singly linked list and returns a boolean indicating if the linked list contains a "cycle".
+
+A cycle is when a node's next point actually points back to a previous node in the list. This is also sometimes known as a circularly linked list.
+
+#### Solution
+
+To solve this problem we will have two markers traversing through the list. marker1 and marker2. We will have both makers begin at the first node of the list and traverse through the linked list. However the second marker, marker2, will move two nodes ahead for every one node that marker1 moves.
+
+By this logic we can imagine that the markers are "racing" through the linked list, with marker2 moving faster. If the linked list has a cycle and is circularly connected we will have the analogy of a track, in this case the marker2 will eventually be "lapping" the marker1 and they will equal each other.
+
+If the linked list has no cycle, then marker2 should be able to continue on until the very end, never equaling the first marker.
+
+```py
+def cycle_check(node: Node) -> bool:
+    marker1 = node
+    marker2 = node
+
+    while marker1 != None and marker2.next != None:
+        marker1 = marker1.next
+        marker2 = marker2.next.next
+
+        if marker1 == marker2:
+            return True
+    return False
+```
+
+</details>
+
+<details>
+
+  <summary>Reverse a Linked List</summary>
+
+#### Problem
+
+Write a function to reverse a Linked List in place. The function will take in the head of the list as input and return the new head of the list.
+
+You are given the example Linked List Node class:
+
+#### Solution
+
+Since we want to do this in place we want to make the function operate in O(1) space, meaning we don't want to create a new list, so we will simply use the current nodes! Time wise, we can perform the reversal in O(n) time.
+
+We can reverse the list by changing the next pointer of each node. Each node's next pointer should point to the previous node.
+
+In one pass from head to tail of our input list, we will point each node's next pointer to the previous element.
+
+```py
+def reverse_linked_list(head: Node) -> None:
+    current_node = head
+    prev_node = None
+    next_node = None
+
+    # Until we have gone through the end of the list
+    while current_node is not None:
+        # Copy the current_node's next to next_node
+        next_node = current_node.next
+
+        # Reverse the pointer of the next_node
+        current_node.next = prev_node
+
+        # Go one forward in the list
+        prev_node = current_node
+        current_node = next_node
+
+    return prev_node
+```
+
+</details>
+
+<details>
+
+  <summary>Linked List Nth to Last Node</summary>
+
+#### Problem
+
+Write a function that takes a head node and an integer value n and then returns the nth to last node in the linked list. For example, given:
+
+#### Solution
+
+One approach to this problem is this:
+
+Imagine you have a bunch of nodes and a "block" which is n-nodes wide. We could walk this "block" all the way down the list, and once the front of the block reached the end, then the other end of the block would be a the Nth node!
+
+So to implement this "block" we would just have two pointers a left and right pair of pointers. Let's mark out the steps we will need to take:
+
+- Walk one pointer n nodes from the head, this will be the right_point
+- Put the other pointer at the head, this will be the left_point
+- Walk/traverse the block (both pointers) towards the tail, one node at a time, keeping a distance n between them.
+- Once the right_point has hit the tail, we know that the left point is at the target.
+
+Let's see the code for this!
+
+```py
+def nth_to_last_node(n: int, head: Node) -> Node:
+    r_node = l_node = head
+    for i in range(n - 1):
+        if r_node.next == None:
+            raise LookupError('Error: n > size of linked list')
+        else:
+            r_node = r_node.next
+
+    while r_node.next != None:
+        r_node = r_node.next
+        l_node = l_node.next
+
+    return l_node
+```
+
+</details>
+
+## Recursion
+
+![](mdImages/2021-02-19-11-20-15.png)
+
+### Problems
+
+<details>
+
+  <summary>Problem 1</summary>
+
+#### Problem
+
+Write a recursive function which takes an integer and computes the cumulative sum of 0 to that integer
+
+For example, if n=4 , return 4+3+2+1+0, which is 10.
+
+This problem is very similar to the factorial problem presented during the introduction to recursion. Remember, always think of what the base case will look like. In this case, we have a base case of n =0 (Note, you could have also designed the cut off to be 1).
+
+In this case, we have: n + (n-1) + (n-2) + .... + 0
+
+#### Solution
+
+```py
+def rec_sum(n):
+    if n == 0:
+        return 0
+    else:
+        return n + rec_sum(n - 1)
+
+# Testing
+rec_sum(4)
+```
+
+</details>
+
+<details>
+
+  <summary>Problem 2</summary>
+
+#### Problem
+
+Given an integer, create a function which returns the sum of all the individual digits in that integer. For example: if n = 4321, return 4+3+2+1
+
+#### Solution
+
+```py
+def sum_func(n):
+    if n == 0:
+        return 0
+    return n % 10 + sum_func(n // 10)
+
+# Testing
+sum_func(4321)
+```
+
+</details>
+
+<details>
+
+  <summary>Problem 3</summary>
+
+#### Problem
+
+Note, this is a more advanced problem than the previous two! It aso has a lot of variation possibilities and we're ignoring strict requirements here.
+
+Create a function called word_split() which takes in a string phrase and a set list_of_words. The function will then determine if it is possible to split the string in a way in which words can be made from the list of words. You can assume the phrase will only contain words found in the dictionary if it is completely splittable.
+
+#### Solution
+
+```py
+def word_split(string: str, words: 'list[str]') -> bool:
+    if len(string) == 0:
+        return True
+    for word in words:
+        if string[:len(word)] == word:
+            return word_split(string[ len(word): ], words)
+    return False
+
+# Testing
+word_split('themanran',['the','ran','man'])
+word_split('ilovedogsJohn',['i','am','a','dogs','lover','love','John'])
+word_split('themanran',['clown','ran','man'])
+```
+
+</details>
+
+## Memoization
+
+We will discuss memoization and dynamic programming. For your homework assignment, read the Wikipedia article on Memoization, before continuing on with this lecture!
+
+Memoization effectively refers to remembering ("memoization" -> "memorandum" -> to be remembered) results of method calls based on the method inputs and then returning the remembered result rather than computing the result again. You can think of it as a cache for method results. We'll use this in some of the interview problems as improved versions of a purely recursive solution.
+
+A simple example for computing factorials using memoization in Python would be something like this:
+
+```py
+# Create cache for known results
+factorial_memo = {}
+
+def factorial(k):
+
+    if k < 2:
+        return 1
+
+    if not k in factorial_memo:
+        factorial_memo[k] = k * factorial(k-1)
+
+    return factorial_memo[k]
+```
+
+Note how we are now using a dictionary to store previous results of the factorial function! We are now able to increase the efficiency of this function by remembering old results!
+
+Keep this in mind when working on the Coin Change Problem and the Fibonacci Sequence Problem.
+
+We can also encapsulate the memoization process into a class:
+
+```py
+class Memoize:
+    def __init__(self, f):
+        self.f = f
+        self.memo = {}
+    def __call__(self, *args):
+        if not args in self.memo:
+            self.memo[args] = self.f(*args)
+        return self.memo[args]
+```
+
+Then all we would have to do is:
+
+```py
+def factorial(k):
+
+    if k < 2:
+        return 1
+
+    return k * factorial(k - 1)
+
+factorial = Memoize(factorial)
+```
+
+Try comparing the run times of the memoization versions of functions versus the normal recursive solutions!
+
+### Problems
+
+<details>
+
+  <summary>String Reversal</summary>
+
+#### Problem
+
+This interview question requires you to reverse a string using recursion. Make sure to think of the base case here.
+
+Again, make sure you use recursion to accomplish this. Do not slice (e.g. string[::-1]) or use iteration, there muse be a recursive call for the function.
+
+#### Solution
+
+In order to reverse a string using recursion we need to consider what a base and recursive case would look like. Here we've set a base case to be when the length of the string we are passing through the function is length less than or equal to 1.
+
+During the recursive case we grab the first letter and add it on to the recursive call.
+
+```py
+def reverse(string: str) -> str:
+    if len(string) is 0: return ''
+    return reverse(string[1:]) + string[0]
+
+# Testing
+reverse('hello world')
+```
+
+</details>
+
+<details>
+
+  <summary>String Permutation</summary>
+
+#### Problem
+
+Given a string, write a function that uses recursion to output a list of all the possible permutations of that string.
+
+For example, given s='abc' the function should return ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
+
+Note: If a character is repeated, treat each occurence as distinct, for example an input of 'xxx' would return a list with 6 "versions" of 'xxx'
+
+#### Solution
+
+```py
+def permute(string: str) -> 'list[str]':
+    output = []
+
+    # Base Case
+    if len(string) == 1:
+        return [string]
+
+    # for every letter in string
+    for i, let in enumerate(string):
+        for perm in permute(string[:i] + string[i+1:]):
+            output += [let + perm]
+
+    return output
+```
+
+**Conclusion**
+
+There were two main takeaways from tackling this problem:
+
+- Every time we put a new letter in position i, we then had to find all the possible combinations at position i+1 – this was the recursive call that we made. How do we know when to save a string? When we are at a position i that is greater than the number of letters in the input string, then we know that we have found one valid permutation of the string and then we can add it to the list and return to changing letters at positions less than i. This was our base case – remember that we always must have a recursive case and a base case when using recursion!
+- Another big part of this problem was figuring out which letters we can put in a given position. Using our sample string “abc”, lets say that we are going through all the permutations where the first letter is "c”. Then, it should be clear that the letter in the 2nd and 3rd position can only be either “a” or “b”, because “a” is already used. As part of our algorithm, we have to know which letters can be used in a given position – because we can’t reuse the letters that were used in the earlier positions.
+
+</details>
+
+<details>
+
+  <summary>Fibonacci Different Ways!</summary>
+
+#### Problem
+
+Implement a Fibonnaci Sequence in three different ways:
+
+Recursively
+Dynamically (Using Memoization to store results)
+Iteratively
+Remember that a fibonacci sequence: 0,1,1,2,3,5,8,13,21,... starts off with a base case checking to see if n = 0 or 1, then it returns 1.
+
+Else it returns fib(n-1)+fib(n+2).
+
+#### Solution
+
+**Recursively**
+
+The recursive solution is exponential time Big-O , with O(2^n). However, its a very simple and basic implementation to consider:
+
+```py
+def fib_rec(num: int) -> int:
+    if (num < 2): return num
+    return fib_rec(num - 1) + fib_rec(num - 2)
+
+# Testing
+fib_rec(10)
+```
+
+**Dynamically**
+
+In the form it is implemented here, the cache is set beforehand and is based on the desired n number of the Fibonacci Sequence. Note how we check it the cache[n] != None, meaning we have a check to know wether or not to keep setting the cache (and more importantly keep cache of old results!)
+
+```py
+def fib_dyn(num: int, memo = dict()) -> int:
+    if num < 2:
+        return num
+    if num in memo:
+        return memo.get(num)
+
+    ans = fib_dyn(num - 1, memo) + fib_dyn(num - 2, memo)
+    memo[num] = ans
+
+    return ans
+
+# Testing
+fib_dyn(10)
+```
+
+**Iteratively**
+
+```py
+def fib_iter(num: int) -> int:
+    prev = 0
+    cur = 1
+
+    for i in range(num):
+        prev, cur = cur, prev + cur
+
+    return prev
+```
+
+</details>
+
+<details>
+
+  <summary>Coin Change Problem</summary>
+
+#### Problem
+
+This problem has multiple solutions and is a classic problem in showing issues with basic recursion. There are better solutions involving memoization and simple iterative solutions.If you are having trouble with this problem (or it seems to be taking a long time to run in some cases) check out the Solution Notebook and fully read the conclusion link for a detailed description of the various ways to solve this problem!
+
+This is a classic recursion problem: Given a target amount n and a list (array) of distinct coin values, what's the fewest coins needed to make the change amount.
+
+For example:
+
+If n = 10 and coins = [1,5,10]. Then there are 4 possible ways to make change:
+
+1+1+1+1+1+1+1+1+1+1
+
+5 + 1+1+1+1+1
+
+5+5
+
+10
+
+With 1 coin being the minimum amount.
+
+#### Solution
+
+**Recursive Solution**
+
+```py
+def rec_coin(target: int, coins: 'list[int]') -> int:
+    if target == 0:
+        return 0
+
+    if target < 0:
+        return float('inf')
+
+    min_coins = float('inf')
+
+    for coin in coins:
+        num_coins = 1 + rec_coin(target - coin, coins)
+        if num_coins < min_coins:
+            min_coins = num_coins
+
+    return min_coins
+```
+
+**Memoization Solution**
+
+```py
+def rec_coin_dynamic(target: int, coins: 'list[int]', memo = dict()) -> int:
+    if target == 0:
+        return 0
+
+    if target < 0:
+        return float('inf')
+
+    if target in memo:
+        return memo.get(target)
+
+    min_coins = float('inf')
+
+    for coin in coins:
+        num_coins = rec_coin_dynamic(target - coin, coins, memo) + 1
+
+        if num_coins < min_coins:
+            min_coins = num_coins
+
+    memo[target] = min_coins
+    return min_coins
+```
+
+</details>
