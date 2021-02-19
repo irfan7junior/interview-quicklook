@@ -2,6 +2,76 @@
 
 ---
 
+- [Interview Quicklook](#interview-quicklook)
+  - [Big-O Notation](#big-o-notation)
+    - [Different Charts](#different-charts)
+  - [Array](#array)
+    - [Dynamic Array](#dynamic-array)
+    - [Amortized Analysis](#amortized-analysis)
+    - [Problems](#problems)
+      - [Problem](#problem)
+      - [Solution](#solution)
+      - [Problem](#problem-1)
+      - [Solution](#solution-1)
+      - [Problem](#problem-2)
+      - [Solution](#solution-2)
+      - [Problem](#problem-3)
+      - [Solution](#solution-3)
+      - [Problem](#problem-4)
+      - [Solution](#solution-4)
+      - [Problem](#problem-5)
+      - [Solution](#solution-5)
+      - [Problem](#problem-6)
+      - [Solution](#solution-6)
+  - [Stack, Queue, Deque](#stack-queue-deque)
+    - [What is a Stack](#what-is-a-stack)
+    - [What is a Queue](#what-is-a-queue)
+    - [What is a Deque](#what-is-a-deque)
+    - [Problems](#problems-1)
+      - [Problem](#problem-7)
+      - [Solution](#solution-7)
+      - [Problem](#problem-8)
+      - [Solution](#solution-8)
+  - [Linked List](#linked-list)
+    - [What is Linked List](#what-is-linked-list)
+      - [Pros](#pros)
+      - [Cons](#cons)
+    - [What is Doubly Linked List](#what-is-doubly-linked-list)
+    - [Problems](#problems-2)
+      - [Problem](#problem-9)
+      - [Solution](#solution-9)
+      - [Problem](#problem-10)
+      - [Solution](#solution-10)
+      - [Problem](#problem-11)
+      - [Solution](#solution-11)
+  - [Recursion](#recursion)
+    - [Problems](#problems-3)
+      - [Problem](#problem-12)
+      - [Solution](#solution-12)
+      - [Problem](#problem-13)
+      - [Solution](#solution-13)
+      - [Problem](#problem-14)
+      - [Solution](#solution-14)
+    - [Memoization](#memoization)
+    - [Problems](#problems-4)
+      - [Problem](#problem-15)
+      - [Solution](#solution-15)
+      - [Problem](#problem-16)
+      - [Solution](#solution-16)
+      - [Problem](#problem-17)
+      - [Solution](#solution-17)
+      - [Problem](#problem-18)
+      - [Solution](#solution-18)
+  - [Dynamic Programming](#dynamic-programming)
+    - [Memoization Recipe](#memoization-recipe)
+    - [Fibonacci Problem](#fibonacci-problem)
+    - [Grid Traveler Problem](#grid-traveler-problem)
+    - [Can Sum DP Type](#can-sum-dp-type)
+    - [How Sum DP Type](#how-sum-dp-type)
+    - [Best Sum DP Type](#best-sum-dp-type)
+    - [In a Nutshell](#in-a-nutshell)
+    - [Can Construct DP Type](#can-construct-dp-type)
+
 ## Big-O Notation
 
 ### Different Charts
@@ -1143,7 +1213,7 @@ word_split('themanran',['clown','ran','man'])
 
 </details>
 
-## Memoization
+### Memoization
 
 We will discuss memoization and dynamic programming. For your homework assignment, read the Wikipedia article on Memoization, before continuing on with this lecture!
 
@@ -1403,3 +1473,257 @@ def rec_coin_dynamic(target: int, coins: 'list[int]', memo = dict()) -> int:
 ```
 
 </details>
+
+## Dynamic Programming
+
+### Memoization Recipe
+
+<details>
+
+  <summary>Make it work</summary>
+
+- visualize the problem
+- implement the tree using recursion
+- test it
+
+</details>
+
+<details>
+
+  <summary>Make it efficient</summary>
+
+- add a memo object
+- add a base case to return memo values
+- store return values into the memo
+
+</details>
+
+### Fibonacci Problem
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+![](mdImages/2021-02-19-20-52-50.png)
+
+**Fibo Tree**
+
+![](mdImages/2021-02-19-21-23-24.png)
+
+```py
+def fib_rec(num: int, memo = dict()) -> int:
+    if num < 2:
+        return num
+    if num in memo:
+        return memo.get(num)
+
+    ans = fib_rec(num - 1, memo) + fib_rec(num - 2, memo)
+    memo[num] = ans
+    return ans
+```
+
+</details>
+
+### Grid Traveler Problem
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+![](mdImages/2021-02-19-20-59-38.png)
+
+**Grid Traveler Tree**
+
+![](mdImages/2021-02-19-21-21-53.png)
+
+```py
+  def grid_traveler_rec(rows: int, cols: int, memo = dict()) -> int:
+    if rows is 0 or cols is 0:
+        return 0
+    if rows is 1 and cols is 1:
+        return 1
+
+    if f'{rows},{cols}' in memo:
+        return memo[f'{rows},{cols}']
+
+    ans = grid_traveler_rec(rows - 1, cols, memo) + grid_traveler_rec(rows, cols - 1, memo)
+    memo[f'{rows},{cols}'] = ans
+    return ans
+```
+
+</details>
+
+### Can Sum DP Type
+
+<details>
+
+  <summary>Procedure</summary>
+
+- Write a function **can_sum(target_sum, numbers)** that takes in a **target_sum** and an array of numbers as arguments
+- The function should return a boolean indicating whether it is possible to generate the **target_sum** using numbers from the array
+- You may use an element of the array as many times as needed
+- You may assume that all input numbers are non-negative
+
+</details>
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+![](mdImages/2021-02-19-21-17-15.png)
+
+**Can Sum Tree**
+
+![](mdImages/2021-02-19-21-20-19.png)
+
+```py
+def can_sum_rec(target: int, nums: int, memo = dict()) -> bool:
+    if target == 0:
+        return True
+
+    if target < 0:
+        return False
+
+    if target in memo:
+        return memo.get(target)
+
+    for num in nums:
+        if can_sum_rec(target - num, nums, memo):
+            memo[target] = True
+            return True
+
+    memo[target] = False
+    return False
+```
+
+</details>
+
+### How Sum DP Type
+
+<details>
+
+  <summary>Procedure</summary>
+
+- Write a function **how_sum(target_sum, numbers)** that takes in a target_sum and an array of numbers as arguments
+- The function should return an array containing any combination of elements that add up to exactly that **target_sum**. If there is no combination that adds up to the **target_sum**, then return null
+- If there are multiple combinations possible, you may return any single one
+
+</details>
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+![](mdImages/2021-02-19-21-35-50.png)
+
+**How Sum Tree**
+
+![](mdImages/2021-02-19-21-36-20.png)
+
+```py
+def how_sum_rec(target: int, nums: 'list[int]', memo = dict()) -> 'list[int]':
+    if target == 0:
+        return []
+
+    if target < 0:
+        return None
+
+    if target in memo:
+        return memo.get(target)
+
+    for num in nums:
+        current = how_sum_rec(target - num, nums, memo)
+        if current is not None:
+            current.append(num)
+            memo[target] = current
+            return current
+    memo[target] = None
+    return None
+```
+
+</details>
+
+### Best Sum DP Type
+
+<details>
+
+  <summary>Procedure</summary>
+
+- Write a function **best_sum(target_sum, numbers)** that takes in a **target_sum** and an array of numbers an an argument
+- The function should return an array containing the **shortest** combination of numbers that add up to exactly the **target_sum**
+- If there is a tie for the shortest combination, you may return any one of the shortest
+
+</details>
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+![](mdImages/2021-02-19-21-46-44.png)
+
+**Best Sum Tree**
+
+![](mdImages/2021-02-19-21-47-21.png)
+
+```py
+def best_sum_rec(target: int, nums: 'list[int]', memo = dict()):
+    if target == 0:
+        return []
+
+    if target < 0:
+        return None
+
+    if target in memo:
+        return memo.get(target)
+
+    min_array = None
+    for num in nums:
+        current_array = best_sum_rec(target - num, nums, memo)
+        if current_array is not None:
+            current_array.append(num)
+            if min_array is None:
+                min_array = current_array
+            elif len(current_array) < len(min_array):
+                min_array = current_array
+    memo[target] = min_array
+    return min_array
+```
+
+</details>
+
+### In a Nutshell
+
+- **can_sum => Decision Problem**
+  _(can you do it? yes/no)_
+
+  > m = target_sum
+  > n = array length
+
+  | Brute Force   | Memoized        |
+  | ------------- | --------------- |
+  | O($n^m$) time | O($m * n$) time |
+  | O($m$) space  | O($m$) space    |
+
+- **how_sum => Combinatoric Problem**
+  _(how will you do it?)_
+
+  > m = target_sum
+  > n = array length
+
+  | Brute Force       | Memoized          |
+  | ----------------- | ----------------- |
+  | O($n^m * m$) time | O($n * m^2$) time |
+  | O($m$) space      | O($m^2$) space    |
+
+- **best_sum => Optimization Problem**
+  _(what is the best way to do it?)_
+
+  > m = target_sum
+  > n = array length
+
+  | Brute Force       | Memoized          |
+  | ----------------- | ----------------- |
+  | O($n^m * m$) time | O($n * m^2$) time |
+  | O($m^2$) space    | O($m^2$) space    |
+
+### Can Construct DP Type
