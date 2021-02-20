@@ -2,76 +2,6 @@
 
 ---
 
-- [Interview Quicklook](#interview-quicklook)
-  - [Big-O Notation](#big-o-notation)
-    - [Different Charts](#different-charts)
-  - [Array](#array)
-    - [Dynamic Array](#dynamic-array)
-    - [Amortized Analysis](#amortized-analysis)
-    - [Problems](#problems)
-      - [Problem](#problem)
-      - [Solution](#solution)
-      - [Problem](#problem-1)
-      - [Solution](#solution-1)
-      - [Problem](#problem-2)
-      - [Solution](#solution-2)
-      - [Problem](#problem-3)
-      - [Solution](#solution-3)
-      - [Problem](#problem-4)
-      - [Solution](#solution-4)
-      - [Problem](#problem-5)
-      - [Solution](#solution-5)
-      - [Problem](#problem-6)
-      - [Solution](#solution-6)
-  - [Stack, Queue, Deque](#stack-queue-deque)
-    - [What is a Stack](#what-is-a-stack)
-    - [What is a Queue](#what-is-a-queue)
-    - [What is a Deque](#what-is-a-deque)
-    - [Problems](#problems-1)
-      - [Problem](#problem-7)
-      - [Solution](#solution-7)
-      - [Problem](#problem-8)
-      - [Solution](#solution-8)
-  - [Linked List](#linked-list)
-    - [What is Linked List](#what-is-linked-list)
-      - [Pros](#pros)
-      - [Cons](#cons)
-    - [What is Doubly Linked List](#what-is-doubly-linked-list)
-    - [Problems](#problems-2)
-      - [Problem](#problem-9)
-      - [Solution](#solution-9)
-      - [Problem](#problem-10)
-      - [Solution](#solution-10)
-      - [Problem](#problem-11)
-      - [Solution](#solution-11)
-  - [Recursion](#recursion)
-    - [Problems](#problems-3)
-      - [Problem](#problem-12)
-      - [Solution](#solution-12)
-      - [Problem](#problem-13)
-      - [Solution](#solution-13)
-      - [Problem](#problem-14)
-      - [Solution](#solution-14)
-    - [Memoization](#memoization)
-    - [Problems](#problems-4)
-      - [Problem](#problem-15)
-      - [Solution](#solution-15)
-      - [Problem](#problem-16)
-      - [Solution](#solution-16)
-      - [Problem](#problem-17)
-      - [Solution](#solution-17)
-      - [Problem](#problem-18)
-      - [Solution](#solution-18)
-  - [Dynamic Programming](#dynamic-programming)
-    - [Memoization Recipe](#memoization-recipe)
-    - [Fibonacci Problem](#fibonacci-problem)
-    - [Grid Traveler Problem](#grid-traveler-problem)
-    - [Can Sum DP Type](#can-sum-dp-type)
-    - [How Sum DP Type](#how-sum-dp-type)
-    - [Best Sum DP Type](#best-sum-dp-type)
-    - [In a Nutshell](#in-a-nutshell)
-    - [Can Construct DP Type](#can-construct-dp-type)
-
 ## Big-O Notation
 
 ### Different Charts
@@ -1504,11 +1434,15 @@ def rec_coin_dynamic(target: int, coins: 'list[int]', memo = dict()) -> int:
 
   <summary>Solution and Complexity</summary>
 
-![](mdImages/2021-02-19-20-52-50.png)
+| Time   | Space  |
+| ------ | ------ |
+| $O(n)$ | $O(n)$ |
 
 **Fibo Tree**
 
-![](mdImages/2021-02-19-21-23-24.png)
+![](mdImages/fib_rec.gif)
+
+**Python Code**
 
 ```py
 def fib_rec(num: int, memo = dict()) -> int:
@@ -1530,11 +1464,18 @@ def fib_rec(num: int, memo = dict()) -> int:
 
   <summary>Solution and Complexity</summary>
 
-![](mdImages/2021-02-19-20-59-38.png)
+|             | Time         | Space      |
+| ----------- | ------------ | ---------- |
+| Brute Force | $O(2^{n+m})$ | $O(n + m)$ |
+| Memoized    | $O(m * n)$   | $O(n + m)$ |
+
+> n = rows and m = cols
 
 **Grid Traveler Tree**
 
 ![](mdImages/2021-02-19-21-21-53.png)
+
+**Python Code**
 
 ```py
   def grid_traveler_rec(rows: int, cols: int, memo = dict()) -> int:
@@ -1553,7 +1494,7 @@ def fib_rec(num: int, memo = dict()) -> int:
 
 </details>
 
-### Can Sum DP Type
+### Can Sum
 
 <details>
 
@@ -1570,11 +1511,22 @@ def fib_rec(num: int, memo = dict()) -> int:
 
   <summary>Solution and Complexity</summary>
 
-![](mdImages/2021-02-19-21-17-15.png)
+|             | Time       | Space  |
+| ----------- | ---------- | ------ |
+| Brute Force | $O(n^m)$   | $O(m)$ |
+| Memoized    | $O(m * n)$ | $O(m)$ |
+
+> m = target sum, n = array length
 
 **Can Sum Tree**
 
 ![](mdImages/2021-02-19-21-20-19.png)
+
+**Visualization**
+
+![](mdImages/can_sum_rec.gif)
+
+**Python Code**
 
 ```py
 def can_sum_rec(target: int, nums: int, memo = dict()) -> bool:
@@ -1598,7 +1550,7 @@ def can_sum_rec(target: int, nums: int, memo = dict()) -> bool:
 
 </details>
 
-### How Sum DP Type
+### How Sum
 
 <details>
 
@@ -1614,11 +1566,22 @@ def can_sum_rec(target: int, nums: int, memo = dict()) -> bool:
 
   <summary>Solution and Complexity</summary>
 
-![](mdImages/2021-02-19-21-35-50.png)
+|             | Time         | Space    |
+| ----------- | ------------ | -------- |
+| Brute Force | $O(n^m + m)$ | $O(m)$   |
+| Memoized    | $O(n * m^2)$ | $O(m^2)$ |
+
+> m = target sum, n = array length
 
 **How Sum Tree**
 
 ![](mdImages/2021-02-19-21-36-20.png)
+
+**Visualize**
+
+![](mdImages/how_sum_rec.gif)
+
+**Code**
 
 ```py
 def how_sum_rec(target: int, nums: 'list[int]', memo = dict()) -> 'list[int]':
@@ -1643,7 +1606,7 @@ def how_sum_rec(target: int, nums: 'list[int]', memo = dict()) -> 'list[int]':
 
 </details>
 
-### Best Sum DP Type
+### Best Sum
 
 <details>
 
@@ -1659,11 +1622,22 @@ def how_sum_rec(target: int, nums: 'list[int]', memo = dict()) -> 'list[int]':
 
   <summary>Solution and Complexity</summary>
 
-![](mdImages/2021-02-19-21-46-44.png)
+|             | Time         | Space    |
+| ----------- | ------------ | -------- |
+| Brute Force | $O(n^m + m)$ | $O(m^2)$ |
+| Memoized    | $O(n * m^2)$ | $O(m^2)$ |
+
+> m = target sum, n = array length
 
 **Best Sum Tree**
 
 ![](mdImages/2021-02-19-21-47-21.png)
+
+**Visualize**
+
+![](mdImages/best_sum_rec.gif)
+
+**Python Code**
 
 ```py
 def best_sum_rec(target: int, nums: 'list[int]', memo = dict()):
@@ -1701,19 +1675,19 @@ def best_sum_rec(target: int, nums: 'list[int]', memo = dict()):
 
   | Brute Force   | Memoized        |
   | ------------- | --------------- |
-  | O($n^m$) time | O($m * n$) time |
-  | O($m$) space  | O($m$) space    |
+  | $O(n^m) time$ | $O(m * n)$ time |
+  | $O(m)$ space  | $O(m) space     |
 
 - **how_sum => Combinatoric Problem**
   _(how will you do it?)_
 
   > m = target_sum
-  > n = array length
+  > n = array lengtized
 
   | Brute Force       | Memoized          |
   | ----------------- | ----------------- |
-  | O($n^m * m$) time | O($n * m^2$) time |
-  | O($m$) space      | O($m^2$) space    |
+  | $O(n^m * m)$ time | $O(n * m^2)$ time |
+  | $O(m)$ space      | $O(m^2)$ space    |
 
 - **best_sum => Optimization Problem**
   _(what is the best way to do it?)_
@@ -1723,7 +1697,379 @@ def best_sum_rec(target: int, nums: 'list[int]', memo = dict()):
 
   | Brute Force       | Memoized          |
   | ----------------- | ----------------- |
-  | O($n^m * m$) time | O($n * m^2$) time |
-  | O($m^2$) space    | O($m^2$) space    |
+  | $O(n^m * m)$ time | $O(n * m^2)$ time |
+  | $O(m^2)$ space    | $O(m^2)$ space    |
 
-### Can Construct DP Type
+### Can Construct
+
+<details>
+
+  <summary>Procedure</summary>
+
+- Write a function **can_construct(target, word_bank)** that accepts a target string and an array of strings.
+- The function should return a boolean indicating whether the **target** can be constructed by concatenating elements of the **word_bank** as many times as needed.
+- You may reuse elements of **word_bank** as many times as needed.
+
+</details>
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+|             | Time         | Space    |
+| ----------- | ------------ | -------- |
+| Brute Force | $O(n^m * m)$ | $O(m^2)$ |
+| Memoized    | $O(n * m^2)$ | $O(m^2)$ |
+
+> m = target.length, n = words.length
+
+**Can Construct Tree**
+
+![](mdImages/2021-02-20-11-17-06.png)
+
+**Visualize**
+
+![](mdImages/can_construct_rec.gif)
+
+**Python Code**
+
+```py
+def can_construct_rec(target: str, words: 'list[int]', memo = dict()) -> bool:
+    if target == '':
+        return True
+
+    if target in memo:
+        return memo.get(target)
+
+    for word in words:
+        if target.startswith(word):
+            if can_construct_rec(target[len(word):], words, memo):
+                memo[target] = True
+                return True
+    memo[target] = False
+    return False
+```
+
+</details>
+
+### Count Construct
+
+<details>
+
+  <summary>Procedure</summary>
+
+- Write a function **count_construct(target, word_bank)** that accepts a target string and an array of strings
+- The function should return the number of ways that the **target** can be constructed by concatenating elements of the **word_bank** array
+- You may reuse elements of **word_bank** as many times as needed
+
+</details>
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+|             | Time         | Space    |
+| ----------- | ------------ | -------- |
+| Brute Force | $O(n^m * m)$ | $O(m^2)$ |
+| Memoized    | $O(n * m^2)$ | $O(m^2)$ |
+
+> m = target.length, n = words.length
+
+**Count Construct Tree**
+
+![](mdImages/2021-02-20-11-31-28.png)
+
+**Visualize**
+
+![](mdImages/count_construct_rec.gif)
+
+**Python Code**
+
+```py
+def count_construct_rec(target: str, words: 'list[str]', memo = dict()) -> int:
+    if target == '':
+        return 1
+
+    if target in memo:
+        return memo.get(target)
+
+    count = 0
+    for word in words:
+        if target.startswith(word):
+            count += count_construct_rec(target[len(word):], words)
+
+    memo[target] = count
+    return count
+```
+
+</details>
+
+### All Construct
+
+<details>
+
+  <summary>Procedure</summary>
+
+- Write a function **all_construct(target, word_bank)** that accepts a target string and an array of strings.
+- The function should return a 2D array containing all of the ways that the **targer** can be constructed by concatenating elements of the **word_bank** array. Each element of the 2D array should represent one combination that constructs the **target**.
+
+</details>
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+|             | Time     | Space  |
+| ----------- | -------- | ------ |
+| Brute Force | $O(n^m)$ | $O(m)$ |
+| Memoized    | $O(n^m)$ | $O(m)$ |
+
+> m = target.length, n = words.length
+
+**All Construct Tree**
+
+![](mdImages/2021-02-20-11-43-30.png)
+
+**Visualize**
+
+![](mdImages/all_construct_rec.gif)
+
+**Python Code**
+
+```py
+def all_construct_rec(target: str, words: 'list[str]', memo = dict()) -> 'list[list[str]]':
+    if target == '':
+        return [[]]
+
+    if target in memo:
+        return memo.get(target)
+
+    result_list = []
+    for word in words:
+        if target.startswith(word):
+            current_2d_list = all_construct_rec(target[len(word):], words)
+            for current_1d in current_2d_list:
+                current_1d = [word] + current_1d
+                result_list.append(current_1d)
+
+    memo[target] = result_list
+    return result_list
+```
+
+</details>
+
+### Fibonacci Problem (Table)
+
+<details>
+
+  <summary>Solution</summary>
+
+```py
+def fib_table(target: int) -> int:
+  memo = [None] * max(2, (target + 1))
+  memo[0] = 0
+  memo[1] = 1
+  for num in range(2, target + 1):
+      memo[num] = memo[num - 1] + memo[num - 2]
+
+  return memo[target]
+```
+
+</details>
+
+### Grid Traveler Problem (Table)
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+**Table**
+![](mdImages/2021-02-20-12-10-55.png)
+
+**Visualize**
+
+![](mdImages/grid_traveler.gif)
+
+**Python Code**
+
+```py
+def grid_traveler_tab(rows: int, cols: int) -> int:
+    memo = [[0] * (cols + 1) for i in range(rows + 1)]
+    memo[1][1] = 1
+    for i in range (rows + 1):
+        for j in range(cols + 1):
+            if i + 1 >= 0 and i + 1 <= rows:
+                memo[i+1][j] += memo[i][j]
+            if j + 1 >= 0 and j + 1 <= cols:
+                memo[i][j+1] += memo[i][j]
+    return memo[rows][cols]
+```
+
+</details>
+
+### Can Sum (Table)
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+**Visualize**
+![](mdImages/can_sum_table.gif)
+
+**Python Code**
+
+```py
+def can_sum_tab(target: int, nums: 'list[int]') -> bool:
+    memo = [False] * (target + 1)
+    memo[0] = True
+    for cur in range(0, target + 1):
+        for num in nums:
+            if cur + num <= target and memo[cur] == True:
+                memo[cur + num] = True
+    return memo[target]
+```
+
+</details>
+
+### How Sum (Table)
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+**Visualize**
+![](mdImages/how_sum_table.gif)
+
+**Python Code**
+
+```py
+def how_sum_table(target: int, nums: 'list[int]') -> 'list[int]':
+    memo = [None] * (target + 1)
+    memo[0] = []
+    for cur in range(target + 1):
+        if memo[cur] is not None:
+            for num in nums:
+                if cur + num <= target:
+                    memo[cur + num] = [num] + [num for num in memo[cur]]
+    return memo[target]
+```
+
+</details>
+
+### Best Sum (Table)
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+**Visualize**
+![](mdImages/best_sum_table.gif)
+
+**Python Code**
+
+```py
+def best_sum_tab(target: int, nums: 'list[int]') -> 'list[int]':
+    memo = [None] * (target + 1)
+    memo[0] = []
+
+    for cur in range(target + 1):
+        if memo[cur] is not None:
+            for num in nums:
+                if cur + num <= target:
+                    cur_array = [num] + [num for num in memo[cur]]
+                    if memo[cur + num] is None or len(memo[cur + num]) > len(cur_array):
+                        memo[cur + num] = cur_array
+    return memo[target]
+
+```
+
+</details>
+
+### Can Construct (Table)
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+**Visualize**
+![](mdImages/can_construct_table.gif)
+
+**Python Code**
+
+```py
+def can_construct_table(target: str, words: 'list[str]') -> bool:
+    memo = [False] * (len(target) + 1)
+    memo[0] = True
+
+    for cur in range(len(target) + 1):
+        if memo[cur] is True:
+            for word in words:
+                if target[cur:].startswith(word):
+                    memo[cur + len(word)] = True
+    return memo[len(target)]
+```
+
+</details>
+
+### Count Construct (Table)
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+**Visualize**
+![](mdImages/count_construct_table.gif)
+
+**Python Code**
+
+```py
+def count_construct_tab(target: str, words: 'list[str]') -> int:
+    size = len(target)
+    memo = [0] * (size + 1)
+    memo[0] = 1
+
+    for cur in range(size + 1):
+        if memo[cur] is not 0:
+            for word in words:
+                if target[cur:].startswith(word):
+                    memo[cur + len(word)] += memo[cur]
+    return memo[size]
+```
+
+</details>
+
+### All Construct (Table)
+
+<details>
+
+  <summary>Solution and Complexity</summary>
+
+**Visualize**
+![](mdImages/all_construct.gif)
+
+**Python Code**
+
+```py
+def all_construct_tab(target: str, words: 'list[str]') -> 'list[list[str]]':
+    size = len(target)
+    memo = [[] for _ in range(size + 1)]
+    memo[0] = [[]]
+
+    for cur in range(size + 1):
+        for word in words:
+            if target[cur:].startswith(word):
+                new_combinations = list(map(lambda sub_array: [word for word in sub_array] + [word], memo[cur]))
+                memo[cur + len(word)].extend(new_combinations)
+    return memo[size]
+```
+
+</details>
+
+### Tabulation Recipe
+
+- Visualize the problem as a table
+- Size the table based on the inputs
+- Initialize the table with default values
+- Seed the trivial answer into the table
+- Iterate through the table
+- Fill further positions based on the current position
