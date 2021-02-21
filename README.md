@@ -2073,3 +2073,338 @@ def all_construct_tab(target: str, words: 'list[str]') -> 'list[list[str]]':
 - Seed the trivial answer into the table
 - Iterate through the table
 - Fill further positions based on the current position
+
+## Trees
+
+### What is a Tree?
+
+![](mdImages/2021-02-20-23-02-31.png)
+
+<details>
+
+  <summary>Tree Diagram</summary>
+
+![](https://res.cloudinary.com/practicaldev/image/fetch/s--od-naD9n--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://miro.medium.com/max/975/1%2APWJiwTxRdQy8A_Y0hAv5Eg.png)
+
+</details>
+
+<details>
+
+  <summary>Tree Node</summary>
+
+```py
+class Node(object):
+    def __init__(self, value, left = None, right = None, parent = None):
+        self.value = value
+        self.right = right
+        self.left = left
+        self.parent = parent
+
+    def __repr__(self):
+        return 'Node Value: ' + str(self.value)
+```
+
+</details>
+
+<details>
+
+  <summary>Insert a New Node</summary>
+
+```py
+def insert(self, value):
+    new_node = BinaryTree.create_node(value)
+
+    # If the root is None
+    if self.root is None:
+        self.root = new_node
+        return
+
+    current = self.root
+    parent = None
+
+    # While the parent didn't reach the leaf node
+    while current is not None:
+        if current.value < new_node.value:
+            parent = current
+            current = current.right
+        else:
+            parent = current
+            current = current.left
+
+    # Compare the new_node with parent and assign respectively.
+    if new_node.value > parent.value:
+        parent.right = new_node
+        new_node.parent = parent
+    else:
+        parent.left = new_node
+        new_node.parent = parent
+```
+
+</details>
+
+<details>
+
+  <summary>Preorder Recursive</summary>
+
+```py
+# Recursive preorder
+# Parent -> Left Child -> Right Child
+def preorder(self, node: Node):
+    if node:
+        print(node.value, end=' ')
+        self.preorder(node.left)
+        self.preorder(node.right)
+```
+
+</details>
+
+<details>
+
+  <summary>Preorder Iterative</summary>
+
+```py
+## Iterative preorder
+# Left Child -> Parent -> Right Child
+def preorder_iter(self):
+    stack = deque()
+    stack.append(self.root)
+
+    # while stack is not empty
+    while len(stack) is not 0:
+        current = stack.pop()
+        print(current.value, end=' ')
+
+        # append right first to pop it last
+        if current.right is not None:
+            stack.append(current.right)
+
+        # append left last to pop it first
+        if current.left is not None:
+            stack.append(current.left)
+```
+
+</details>
+
+<details>
+
+  <summary>Inorder Recursive</summary>
+
+```py
+## Recursive inorder
+# Left Child -> Parent -> Right Child
+def inorder(self, node: Node):
+    if node is not None:
+        self.inorder(node.left)
+        print(node.value, end=' ')
+        self.inorder(node.right)
+```
+
+</details>
+
+<details>
+
+  <summary>Inorder Iterative</summary>
+
+```py
+## Iterative inorder
+# Left Child -> Parent -> Right Child
+def inorder_iter(self):
+    current = self.root
+    stack = deque()
+
+    while True:
+        # continue traversing the left child while pushing on stack
+        if current is not None:
+            stack.append(current)
+            current = current.left
+        else:
+            # pop out from stack and print and traverse its right child
+            if len(stack) is not 0:
+                current = stack.pop()
+                print(current.value, end=' ')
+                current = current.right
+            # stack is empty, i.e., traversed successfully
+            else:
+                break
+```
+
+</details>
+
+<details>
+
+  <summary>Postorder Recursive</summary>
+
+```py
+## Recursive postorder
+# Left Child -> Right Child -> Parent
+def postorder(self, node: Node):
+    if node is not None:
+        self.postorder(node.left)
+        self.postorder(node.right)
+        print(node.value, end=' ')
+```
+
+</details>
+
+<details>
+
+  <summary>Postorder Iterative</summary>
+
+```py
+## Iterative postorder
+# Left Child -> Right Child -> Parent
+def postorder_iter(self):
+    stack1 = deque()
+    stack2 = deque()
+    current = None
+
+    stack1.append(self.root)
+    while len(stack1) is not 0:
+        current = stack1.pop()
+        stack2.append(current)
+
+        if current.left is not None:
+            stack1.append(current.left)
+        if current.right is not None:
+            stack1.append(current.right)
+
+    while len(stack2) is not 0:
+        current = stack2.pop()
+        print(current.value, end=' ')
+```
+
+</details>
+
+<details>
+
+  <summary>Height of a tree Recursive</summary>
+
+```py
+# Height of a tree Recursively
+def height_rec(self, node: Node):
+    # if root is not present then height is -1
+    if node is None:
+        return -1
+
+    left_height = self.height_rec(node.left)
+    right_height = self.height_rec(node.right)
+
+    return (max(left_height, right_height) + 1)
+```
+
+</details>
+
+<details>
+
+  <summary>B-Tree Transplant</summary>
+
+```py
+# Transplant in Tree
+def transplant(self, prev: Node, cur: Node):
+    if prev.parent is None:
+        self.root = cur
+    elif prev.parent.left == prev:
+        prev.parent.left = cur
+    else:
+        prev.parent.right = cur
+    if cur is not None:
+        cur.parent = prev.parent
+```
+
+</details>
+
+<details>
+
+  <summary>Delete a Node</summary>
+
+```py
+# Delete a node in Tree
+def delete(self, node: Node):
+    # if only right child
+    if node.left is None:
+        self.transplant(node, node.right)
+    # if only left child
+    elif node.right is None:
+        self.transplant(node, node.left)
+    # if both child
+    else:
+        successor = self.min_node(node.right)
+        # if successor is not the right child of node_to_be_deleted
+        if successor.parent != node:
+            self.transplant(successor, successor.right)
+            successor.right = node.right
+            successor.right.parent = successor
+        # successor became right child of node_to_be_deleted
+        self.transplant(node, successor)
+        successor.left = node.left
+        successor.left.parent = successor
+```
+
+</details>
+
+<details>
+
+  <summary>Search a Node Recursive</summary>
+
+```py
+# Search for a value Iterative
+def search_rec(self, val):
+    cur = self.root
+    while cur is not None and cur.value is not val:
+        if val < cur.value:
+            cur = cur.left
+        else:
+            cur = cur.right
+    return cur
+```
+
+</details>
+
+<details>
+
+  <summary>Min Node Iterative</summary>
+
+```py
+# Min Node Iterative
+def min_node(self, node = None):
+    if node is None:
+        node = self.root
+    cur = node
+    while cur.left is not None:
+        cur = cur.left
+    return cur
+```
+
+</details>
+
+<details>
+
+  <summary>Max Node Iterative</summary>
+
+```py
+# Max node Iterative
+def max_node(self, node = None):
+    if node is None:
+        node = self.root
+    cur = node
+    while cur.right is not None:
+        cur = cur.right
+    return cur
+```
+
+</details>
+
+<details>
+
+  <summary>Pretty Print</summary>
+
+```py
+# Pretty Print
+def pretty_print(self, node: Node, level = 0):
+    if node is not None:
+        self.pretty_print(node.left, level + 1)
+        print(' ' * 4 * level + '->', node.value)
+        self.pretty_print(node.right, level + 1)
+```
+
+</details>
