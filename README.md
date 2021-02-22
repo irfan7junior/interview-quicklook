@@ -2277,6 +2277,39 @@ def postorder_iter(self):
 
 <details>
 
+  <summary>Level Order Traversal</summary>
+
+```py
+## Level Order
+# Breadth First Print
+def level_order(self):
+  queue = deque()
+  queue.append(self.root)
+
+  cur_count = 1
+  prev_count = 0
+
+  while len(queue) is not 0:
+      current = queue.popleft()
+      print(current.value, end=' ')
+      cur_count -= 1
+
+      if current.left:
+          queue.append(current.left)
+          prev_count += 1
+      if current.right:
+          queue.append(current.right)
+          prev_count += 1
+
+      if cur_count == 0:
+          cur_count, prev_count = prev_count, cur_count
+          print()
+```
+
+</details>
+
+<details>
+
   <summary>Height of a tree Recursive</summary>
 
 ```py
@@ -2405,6 +2438,169 @@ def pretty_print(self, node: Node, level = 0):
         self.pretty_print(node.left, level + 1)
         print(' ' * 4 * level + '->', node.value)
         self.pretty_print(node.right, level + 1)
+```
+
+</details>
+
+<details>
+
+  <summary>Verify BST</summary>
+
+```py
+# verify BST
+@staticmethod
+def verify_bst(root: Node):
+    stack = deque()
+    current = root
+
+    array = []
+
+    while True:
+        if current is not None:
+            stack.append(current)
+            current = current.left
+        else:
+            if len(stack) is not 0:
+                current = stack.pop()
+                array.append(current.value)
+                current = current.right
+            else:
+                break
+    if array == sorted(array):
+        return True
+    else:
+        return False
+```
+
+</details>
+
+<details>
+
+  <summary>Trim a BST</summary>
+
+```py
+# Trim a BST
+@staticmethod
+def trim_bst(node: Node, min_val, max_val):
+    if node is None:
+        return None
+
+    node.left = BinaryTree.trim_bst(node.left, min_val, max_val)
+    node.right = BinaryTree.trim_bst(node.right, min_val, max_val)
+
+    if min_val <= node.value <= max_val:
+        return node
+
+    if node.value < min_val:
+        return node.right
+
+    if node.value > max_val:
+        return node.left
+```
+
+</details>
+
+### Binary Heap
+
+<details>
+
+  <summary>Implementation</summary>
+
+```py
+class Heap(object):
+  def __init__(self, items: 'list[int]'):
+      self.items = [None] + [item for item in items]
+      self.heap_size = 0
+
+  def max_heapify(self, index):
+      # get the left child
+      left_index = self.left(index)
+      # get the right child
+      right_index = self.right(index)
+
+      largest = None
+      # if left child is larger than parent, assign largest = left
+      if left_index <= self._get_size() and self.items[left_index] > self.items[index]:
+          largest = left_index
+      else:
+          largest = index
+
+      # if right is larger than largest, assign largest = right
+      if right_index <= self._get_size() and self.items[right_index] > self.items[largest]:
+          largest = right_index
+
+      # if largest is not index, swap them and maxify(largest)
+      if largest is not index:
+          self._swap(self.items, largest, index)
+          self.max_heapify(largest)
+
+  def build_max_heap(self):
+      # start from half the l
+      for i in range(self._get_size() // 2, 0, -1):
+          self.max_heapify(i)
+
+  def parent(self, index):
+      return index // 2
+
+  def left(self, index):
+      return index * 2
+
+  def right(self, index):
+      return index * 2 + 1
+
+  def _swap(self, items, x, y):
+      items[x], items[y] = items[y], items[x]
+
+  def _get_size(self):
+      return len(self.items) - 1
+```
+
+</details>
+
+### Priority Queue
+
+<details>
+
+  <summary>Implementation</summary>
+
+```py
+class PriorityQueue(object):
+  def __init__(self, items = []):
+      self.heap = Heap(items)
+      self.heap.build_max_heap()
+
+
+  def heap_max(self):
+      if self.heap._get_size() > 0:
+          return self.heap.items[1]
+
+  def extract_max(self):
+      if self.heap._get_size() < 1:
+          raise IndexError('Unable to Extract')
+      # assign to max_el the max_element
+      max_el = self.heap_max()
+      # replace max element with last element
+      self.heap.items[1] = self.heap.items[self.heap._get_size()]
+      # remove the duplicate element
+      self.heap.items.pop()
+      # call max heapify to place the first element
+      self.heap.max_heapify(1)
+      return max_el
+
+  def heap_increase_key(self, index, key):
+      if key < self.heap.items[index]:
+          raise Exception('New key is smaller than the old key')
+      self.heap.items[index] = key
+      while index > 1 and self.heap.items[self.heap.parent(index)] < self.heap.items[index]:
+          self._swap(self.heap.items, index, self.heap.parent(index))
+          index = self.heap.parent(index)
+
+  def max_heap_insert(self, key):
+      self.heap.items.append(float('-inf'))
+      self.heap_increase_key(self.heap._get_size(), key)
+
+  def _swap(self, items, x, y):
+      items[x], items[y] = items[y], items[x]
 ```
 
 </details>
