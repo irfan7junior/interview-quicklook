@@ -509,6 +509,8 @@ def sol_uni_char_look(string: str) -> bool:
 
 </details>
 
+---
+
 ## Stack, Queue, Deque
 
 ### What is a Stack
@@ -865,6 +867,8 @@ class Dequeu(object):
 
 </details>
 
+---
+
 ## Linked List
 
 ### What is Linked List
@@ -1056,6 +1060,8 @@ def nth_to_last_node(n: int, head: Node) -> Node:
 ```
 
 </details>
+
+---
 
 ## Recursion
 
@@ -1403,6 +1409,8 @@ def rec_coin_dynamic(target: int, coins: 'list[int]', memo = dict()) -> int:
 ```
 
 </details>
+
+---
 
 ## Dynamic Programming
 
@@ -2074,6 +2082,8 @@ def all_construct_tab(target: str, words: 'list[str]') -> 'list[list[str]]':
 - Iterate through the table
 - Fill further positions based on the current position
 
+---
+
 ## Trees
 
 ### What is a Tree?
@@ -2604,3 +2614,260 @@ class PriorityQueue(object):
 ```
 
 </details>
+
+---
+
+## Searching and Sorting
+
+### Linear Search
+
+<details>
+
+  <summary>Implementation</summary>
+
+```py
+def linear_search(items, el):
+  for item in items:
+      if item == el:
+          return True
+  return False
+```
+
+</details>
+
+### Binary Search
+
+<details>
+
+  <summary>Implementation</summary>
+
+```py
+## Iterative
+def binary_search(items, el):
+  left = 0
+  right = len(items) - 1
+
+  while left <= right:
+      mid = (left + right) // 2
+      if items[mid] == el:
+          return mid
+      if items[mid] > el:
+          right = mid - 1
+      else:
+          left = mid + 1
+  return -1
+
+## Recursive
+def binary_search_rec(items, el, left, right):
+    if left > right:
+        return -1
+
+    mid = (left + right) // 2
+    if items[mid] == el:
+        return mid
+    if items[mid] > el:
+        return binary_search_rec(items, el, left, mid - 1)
+    if items[mid] < el:
+        return binary_search_rec(items, el, mid + 1, right)
+```
+
+</details>
+
+### Hash Table
+
+<details>
+
+  <summary>Implementation</summary>
+
+```py
+class HashTable(object):
+
+  def __init__(self, size = 2):
+      self.size = size
+      self.slots = [None] * self.size
+      self.data = [None] * self.size
+
+  def put(self, key, data):
+      hash_value = self.hash_function(key, len(self.slots))
+      if self.slots[hash_value] == None:
+          self.slots[hash_value] = key
+          self.data[hash_value] = data
+      else:
+          if self.slots[hash_value] == key:
+              self.data[hash_value] = data
+          else:
+              next_slot = self.rehash(hash_value, len(self.slots))
+              while self.slots[next_slot] != None and self.slots[next_slot] != key:
+                  next_slot = self.rehash(next_slot, len(self.slots))
+              if self.slots[next_slot] == None:
+                  self.slots[next_slot] = key
+                  self.data[next_slot] = data
+              else:
+                  self.data[next_slot] = data
+
+  def get(self, key):
+      start_slot = self.hash_function(key, len(self.slots))
+      data = None
+
+      stop = False
+      found = False
+      position = start_slot
+
+      while self.slots[position] != None and not found and not stop:
+          if self.slots[position] == key:
+              found = True
+              data = self.data[position]
+          else:
+              position = self.rehash(position, len(self.slots))
+              if position == start_slot:
+                  stop = True
+      return data
+
+  def hash_function(key, size):
+      return key % size
+
+  def rehash(slef, old_hash, size):
+      return (old_hash+1)%size
+
+  def __getitem__(self, key):
+      return self.get(key)
+
+  def __setitem__(self, key, data):
+      self.put(key, data)
+```
+
+</details>
+
+### Sorting
+
+<details>
+
+  <summary>Bubble Sort</summary>
+
+```py
+def bubble_sort(items):
+  for i in range(len(items) - 1):
+      for j in range(i + 1, len(items)):
+          if items[i] > items[j]:
+              items[i], items[j] = items[j], items[i]
+```
+
+</details>
+
+<details>
+
+  <summary>Selection Sort</summary>
+
+```py
+def selection_sort(items):
+  for i in range(len(items) - 1):
+      smallest_index = i
+      for j in range(i + 1, len(items)):
+          if items[j] < items[smallest_index]:
+              smallest_index = j
+      if smallest_index is not i:
+          items[smallest_index], items[i] = items[i], items[smallest_index]
+```
+
+</details>
+
+<details>
+
+  <summary>Insertion Sort</summary>
+
+```py
+def insertion_sort(items):
+  for i in range(1, len(items)):
+      position = i - 1
+      current_value = items[i]
+      while i >= 0 and items[position] > current_value:
+          items[position + 1] = items[position]
+          position -= 1
+      position += 1
+      items[position] = current_value
+```
+
+</details>
+
+<details>
+
+  <summary>Shell Sort</summary>
+
+```py
+def shell_sort(items):
+  size = len(items)
+  gap = size // 2
+
+  while gap > 0:
+      for i in range(gap, size):
+          temp = items[i]
+
+          j = i
+          while j >= gap and items[j - gap] > temp:
+              items[j] = items[j - gap]
+              j -= gap
+
+          items[j] = temp
+      gap //= 2
+```
+
+</details>
+
+<details>
+
+  <summary>Merge Sort</summary>
+
+```py
+def merge_sort(items, start, end):
+  if start < end:
+      mid = (start + end) // 2
+      merge_sort(items, start, mid)
+      merge_sort(items, mid + 1, end)
+      merge(items, start, mid, end)
+
+def merge(items, start, mid, end):
+  left_list = [el for el in items[start:mid + 1]]
+  left_list.append(float('inf'))
+
+  right_list = [el for el in items[mid + 1:end + 1]]
+  right_list.append(float('inf'))
+
+  size = end - start + 1
+  l_index = 0
+  r_index = 0
+  for i in range(start, end + 1):
+      if left_list[l_index] < right_list[r_index]:
+          items[i] = left_list[l_index]
+          l_index += 1
+      else:
+          items[i] = right_list[r_index]
+          r_index += 1
+```
+
+</details>
+
+<details>
+
+  <summary>Quick Sort</summary>
+
+```py
+def quick_sort(items, start, end):
+  if start < end:
+      part_index = partition(items, start, end)
+      quick_sort(items, start, part_index - 1)
+      quick_sort(items, part_index + 1, end)
+
+def partition(items, start, end):
+  x = items[end]
+  i = start - 1
+  for j in range(start, end):
+      if items[j] <= x:
+          i += 1
+          items[i], items[j] = items[j], items[i]
+  items[i + 1], items[end] = items[end], items[i + 1]
+  return i + 1
+```
+
+</details>
+
+---
