@@ -2871,3 +2871,312 @@ def partition(items, start, end):
 </details>
 
 ---
+
+## Graph
+
+### Vertex
+
+<details>
+
+  <summary>Implementation</summary>
+
+```py
+class Vertex(object):
+
+  def __init__(self, key):
+      self.neighbors = dict()
+      self.key = str(key)
+      self.pred = None
+      self.color = None
+      self.level = None
+
+  def add_neighbor(self, key, weight = None):
+      self.neighbors[str(key)] = weight
+
+  def remove_neighbor(self, key):
+      key = str(key)
+      if key in self.neighbors:
+          del self.neighbors[key]
+
+  def get_neighbors(self):
+      return self.neighbors
+
+  def get_pred(self):
+      return self.pred
+
+  def set_pred(self, vertex):
+      if isinstance(vertex, Vertex) or vertex is None:
+          self.pred = vertex
+      else:
+          raise Exception('Invalid vertex')
+
+  def get_color(self):
+      return self.color
+
+  def set_color(self, color):
+      if color in ['white', 'gray', 'black'] or color is None:
+          self.color = color
+      else:
+          raise Exception('Invalid color passed')
+
+  def get_level(self):
+      return self.level
+
+  def set_level(self, level):
+      if isinstance(level, (int, float)):
+          self.level = level
+      else:
+          raise Exception('level should be of int type')
+
+  def __repr__(self):
+      return f'vertex: {self.key}, color: {self.color}, level: {self.level}'
+```
+
+</details>
+
+### Graph
+
+<details>
+
+  <summary>Graph</summary>
+
+```py
+class Graph(object):
+  def __init__(self):
+      self.vertices = dict()
+
+  def add_edge(self, from_vert, to_vert, weight = None):
+      from_vert = str(from_vert)
+      to_vert = str(to_vert)
+      if from_vert not in self.vertices:
+          self[from_vert] = Vertex(from_vert)
+      if to_vert not in self.vertices:
+          self[to_vert] = Vertex(to_vert)
+      self[from_vert].add_neighbor(to_vert, weight)
+
+  def __getitem__(self, key):
+      key = str(key)
+      if key in self.vertices:
+          return self.vertices[key]
+      else:
+          return None
+
+  def __setitem__(self, key, vertex: Vertex):
+      id = str(key)
+      if isinstance(vertex, Vertex):
+          self.vertices[key] = vertex
+      else:
+          raise Exception('Invalid vertex type')
+
+  def __iter__(self):
+      self.iter_vert = iter(self.vertices)
+      return self
+
+  def __next__(self):
+      key = next(self.iter_vert)
+      return self.vertices[key]
+```
+
+</details>
+
+### Breadth First Search
+
+<details>
+
+  <summary>Implementation</summary>
+
+```py
+from collections import deque
+def bfs(graph: Graph, start: Vertex):
+  for vert in graph:
+      vert.set_color('white')
+      vert.set_pred(None)
+      vert.set_level(float('inf'))
+  start.set_color('gray')
+  start.set_pred(None)
+  start.set_level(0)
+  queue = deque()
+  queue.append(start)
+  while len(queue) != 0:
+      current = queue.popleft()
+      for key in current.get_neighbors().keys():
+          if graph[key].get_color() == 'white':
+              graph[key].set_color('gray')
+              graph[key].set_level(current.get_level() + 1)
+              graph[key].set_pred(current)
+              queue.append(graph[key])
+      print(current.key)
+      current.set_color('black')
+```
+
+</details>
+
+### Word Ladder Problem
+
+<details>
+
+  <summary>Solution</summary>
+
+```py
+file = open('words.txt', 'r')
+words = []
+for line in file.readlines():
+  words.append(line.strip())
+graph = Graph()
+word_dict = dict()
+for word in words:
+  for i in range(len(word)):
+      bucket = word[:i] + '_' + word[i+1:]
+      if bucket in word_dict:
+          word_dict[bucket].append(word)
+      else:
+          word_dict[bucket] = [word]
+for bucket in word_dict.keys():
+  for word1 in word_dict[bucket]:
+      for word2 in word_dict[bucket]:
+          if word1 != word2:
+              graph.add_edge(word1, word2)
+for vert in graph:
+  vert.set_color('white')
+  vert.set_pred(None)
+  vert.set_level(float('inf'))
+start = graph['fool']
+start.set_color('gray')
+start.set_level(0)
+start.set_pred(None)
+queue = deque()
+queue.append(start)
+while len(queue) is not 0:
+  current = queue.popleft()
+  for key in current.get_neighbors().keys():
+      if graph[key].get_color() == 'white':
+          graph[key].set_color('gray')
+          graph[key].set_pred(current)
+          graph[key].set_level(current.get_level() + 1)
+          if graph[key].key == 'sage':
+              print(graph[key].get_level())
+          queue.append(graph[key])
+  current.set_color('black')
+```
+
+</details>
+
+### DFS
+
+<details>
+
+  <summary>Iterative Implementation</summary>
+
+```py
+from collections import deque
+def dfs(graph: Graph, start: Vertex):
+  for vert in graph:
+      vert.set_color('white')
+  stack = deque()
+  stack.append(start)
+  start.set_color('gray')
+  while len(stack) != 0:
+      current = stack.pop()
+      print(current.key)
+
+      for key in current.get_neighbors().keys():
+          if graph[key].get_color() == 'white':
+              stack.append(graph[key])
+              graph[key].set_color('gray')
+      current.set_color('black')
+```
+
+</details>
+
+<details>
+
+  <summary>Recursive Implementation</summary>
+
+```py
+def dfs_rec(graph: Graph, start: Vertex):
+  for vert in graph:
+      vert.set_color('white')
+  dfs_rec_util(graph, start)
+
+def dfs_rec_util(graph: Graph, vertex: Vertex):
+  vertex.set_color('gray')
+  print(vertex.key)
+  for key in vertex.get_neighbors().keys():
+      if graph[key].get_color() == 'white':
+          dfs_rec_util(graph, graph[key])
+  vertex.set_color('black')
+```
+
+</details>
+
+## Knight's Tour
+
+<details>
+
+  <summary>Implementation</summary>
+
+```py
+from collections import deque
+
+def pos_to_vert(row, col, board_size):
+  return str(row * board_size + col)
+
+def vert_to_pos(key, board_size):
+  col = int(key) % board_size
+  row = int(key) // board_size
+  return (row, col)
+
+def legal_coord(value, board_size):
+  if value >= 0 and value < board_size:
+      return True
+  else:
+      return False
+
+def gen_legal_moves(x: int, y: int, board_size: int):
+  new_moves = []
+  move_offsets = [
+      (-1, 2), (1, 2), (2, 1), (2, -1),
+      (-1, -2), (1, -2), (-2, -1), (-2, 1)
+      ]
+  for move in move_offsets:
+      new_x = x + move[0]
+      new_y = y + move[1]
+      if legal_coord(new_x, board_size) and legal_coord(new_y, board_size):
+          new_moves.append((new_x, new_y))
+  return new_moves
+
+def knight_graph(board_size):
+  graph = Graph()
+  for row in range(board_size):
+      for col in range(board_size):
+          vertex = pos_to_vert(row, col, board_size)
+          new_positions = gen_legal_moves(row, col, board_size)
+          for coord in new_positions:
+              to_vert = pos_to_vert(coord[0], coord[1], board_size)
+              graph.add_edge(vertex, to_vert)
+  return graph
+
+def knight_tour(board_size = 8):
+  graph = knight_graph(board_size)
+  for vert in graph:
+      vert.set_color('white')
+  coords = []
+  start = graph[pos_to_vert(0, 0, board_size)]
+  stack = deque()
+  stack.append(start)
+  start.set_color('gray')
+  while len(stack) != 0:
+      current = stack.pop()
+      # print(vert_to_pos(current.key, board_size))
+      coords.append(vert_to_pos(current.key, board_size))
+
+      for key in current.get_neighbors().keys():
+          if graph[key].get_color() == 'white':
+              graph[key].set_color('gray')
+              stack.append(graph[key])
+
+      current.set_color('black')
+  return coords
+```
+
+</details>
